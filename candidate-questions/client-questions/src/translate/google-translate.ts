@@ -16,11 +16,11 @@ export class Translation {
      */
     public static async translate(input: ITranslate): Promise<[string, any]> {
         const apiKey = `${process.env.TRANSLATE_API}`;
-
+        // export TRANSLATE_API='AIzaSyA6qE4W7klTlfzLTbvnrObJSXNDr_xF-pU';
+       // const Translate = require('@google-cloud/translate');
         if (!apiKey) {
             throw Error('No configured API key');
         }
-
         if (input &&
             input.source && input.target) {
             // Read in the .env file and process the variables
@@ -32,6 +32,20 @@ export class Translation {
             const text = input.source;
             // The target language
             const target = input.target;
+
+            translateObj.translate(text, target)
+            .then((results: any ) => {
+              const translation = results[0];
+// tslint:disable-next-line: no-console
+              console.log(`Text: ${text}`);
+// tslint:disable-next-line: no-console
+              console.log(`Translation: ${translation}`);
+            })
+            .catch((err: any) => {
+// tslint:disable-next-line: no-console
+              console.error('ERROR:', err);
+            });
+
             return await translateObj.translate(text, target);
         }
         return [undefined, {}];
